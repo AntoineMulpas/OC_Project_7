@@ -1,7 +1,9 @@
 package com.example.poseidoninc.controllers;
 
 import com.example.poseidoninc.domain.BidList;
+import com.example.poseidoninc.services.BidListService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BidListController {
     // TODO: Inject Bid service
 
+    private final BidListService bidListService;
+
+    @Autowired
+    public BidListController(BidListService bidListService) {
+        this.bidListService = bidListService;
+    }
+
     @RequestMapping("/bidList/list")
     public String home(Model model)
     {
+        model.addAttribute("bidList", bidListService.findAllBids());
         // TODO: call service find all bids to show to the view
         return "bidList/list";
     }

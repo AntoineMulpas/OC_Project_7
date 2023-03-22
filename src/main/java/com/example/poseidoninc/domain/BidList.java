@@ -1,6 +1,7 @@
 package com.example.poseidoninc.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,8 @@ public class BidList {
     // TODO: Map columns in data table BIDLIST with corresponding java fields
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer BidListId;
     private String account;
     private String type;
