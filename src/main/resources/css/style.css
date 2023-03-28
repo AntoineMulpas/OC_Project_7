@@ -1,0 +1,23 @@
+body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
+.input {
+    margin: 2px;
+    width: 200px;
+}
+
+.button-send {
+    width: fit-content;
+    padding: 5px;
+    margin: 2px;
+}

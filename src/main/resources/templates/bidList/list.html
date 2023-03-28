@@ -10,14 +10,14 @@
 <div class="container">
 	<div class="row">
 		<div class="col-6">
-			<a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
+			<a href="/bid/list">Bid List</a>&nbsp;|&nbsp;
 			<a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
 			<a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
 			<a href="/trade/list">Trade</a>&nbsp;|&nbsp;
 			<a href="/ruleName/list">Rule</a>
 		</div>
 		<div class="col-6 text-right">
-			Logged in user: <b th:inline="text"  class="user"> [[${#httpServletRequest.remoteUser}]] </b>
+			Logged in user: <b th:inline="text"  class="user" th:text="${remoteUser}"></b>
 			<form th:action="@{/app-logout}" method="POST">
 				<input type="submit" value="Logout"/>
 			</form>
@@ -25,7 +25,7 @@
 	</div>
 	<div class="row"><h2>Bid List</h2></div>
 	<div class="row">
-		<a href="/bidList/add" class="btn btn-primary btn-sm">Add New</a>
+		<a href="/bid/add" class="btn btn-primary btn-sm">Add New</a>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
@@ -38,9 +38,26 @@
 			</thead>
 			<tbody>
 				<!-- TODO: Show all Bids to the table, the Action column will have Edit & Delete buttons -->
+				<tr th:each="bid : ${bidList}" th:attr="data-userid=${bid.id}">
+					<td><span th:text="${bid.id}"></span></td>
+					<td><span th:text="${bid.account}"></span></td>
+					<td><span th:text="${bid.type}"></span></td>
+					<td><span th:text="${bid.bidQuantity}"></span></td>
+					<td><span onclick="updateId(this.getAttribute('data-userid'))">Edit</span> /
+						<span onclick="deleteId(this.getAttribute('data-userid'))">Delete</span></td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
 </body>
 </html>
+<script>
+	function updateId(id) {
+		console.log("Update: " + id)
+	}
+
+	function deleteId(id) {
+		console.log("Delete: " + id)
+	}
+</script>
