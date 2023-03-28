@@ -1,17 +1,13 @@
 package com.example.poseidoninc.controllers;
 
-import com.example.poseidoninc.domain.BidList;
+import com.example.poseidoninc.domain.Bid;
 import com.example.poseidoninc.services.BidListService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -25,22 +21,27 @@ public class BidListController {
         this.bidListService = bidListService;
     }
 
-    @RequestMapping("/bidList/list")
+    @GetMapping("/bidList/list")
     public String home(Model model)
     {
         model.addAttribute("bidList", bidListService.findAllBids());
         // TODO: call service find all bids to show to the view
-        return "bidList/list";
+        return "/bidList/list";
     }
 
-    @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
+    @GetMapping("/bid/add")
+    public String addBidForm(Bid bid) {
         return "bidList/add";
     }
 
-    @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
+    @PostMapping("/bid/validate")
+    public String validate(@Valid @ModelAttribute("bid") Bid bid, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return bid list
+        Bid savedBid = bidListService.saveNewBid(bid);
+        model.addAttribute("savedBid", savedBid);
+        if (result.hasErrors()) {
+            model.addAttribute("error", result.getErrorCount());
+        }
         return "bidList/add";
     }
 
@@ -51,7 +52,7 @@ public class BidListController {
     }
 
     @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
+    public String updateBid(@PathVariable("id") Integer id, @Valid Bid bid,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
         return "redirect:/bidList/list";

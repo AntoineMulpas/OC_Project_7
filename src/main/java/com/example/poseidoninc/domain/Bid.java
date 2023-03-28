@@ -1,6 +1,7 @@
 package com.example.poseidoninc.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +16,18 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BidList {
+public class Bid {
     // TODO: Map columns in data table BIDLIST with corresponding java fields
 
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer BidListId;
+    private Integer id;
+
+    @NotBlank(message = "Account is mandatory")
     private String account;
+
+    @NotBlank(message = "Type is mandatory")
     private String type;
     private Double bidQuantity;
     private Double askQuantity;
