@@ -2,9 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	  xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Home</title>
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+
+	<link rel="stylesheet" href="/style.css"/>
+	<link rel="stylesheet" type="text/css" href="/bootstrap.min.css" >
 </head>
 <body>
 <div class="container">
@@ -38,13 +40,14 @@
 			</thead>
 			<tbody>
 				<!-- TODO: Show all Bids to the table, the Action column will have Edit & Delete buttons -->
-				<tr th:each="bid : ${bidList}" th:attr="data-userid=${bid.id}">
+				<tr th:each="bid : ${bidList}" >
 					<td><span th:text="${bid.id}"></span></td>
 					<td><span th:text="${bid.account}"></span></td>
 					<td><span th:text="${bid.type}"></span></td>
 					<td><span th:text="${bid.bidQuantity}"></span></td>
-					<td><span onclick="updateId(this.getAttribute('data-userid'))">Edit</span> /
-						<span onclick="deleteId(this.getAttribute('data-userid'))">Delete</span></td>
+					<td><span th:data-userid="${bid.id}" onclick="updateId(this.getAttribute('data-userid'))">Edit
+					</span> /
+						<span th:data-userid="${bid.id}" onclick="deleteId(this.getAttribute('data-userid'))">Delete</span></td>
 				</tr>
 			</tbody>
 		</table>
@@ -59,5 +62,7 @@
 
 	function deleteId(id) {
 		console.log("Delete: " + id)
+		fetch("http://localhost:8080/bidList/delete/" + id)
+				.then(res => window.open("http://localhost:8080/bidList/list", "_self"))
 	}
 </script>
