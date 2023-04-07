@@ -9,16 +9,35 @@
 	<link rel="stylesheet" type="text/css" href="/bootstrap.min.css" >
 </head>
 <body>
-<div class="container">
+<div class="container d-flex justify-content-center flex-column align-items-center">
 	<div class="row">
 		<h2>Update Bid</h2>
 	</div>
 
 	<div class="row">
-		<form action="#" th:action="@{/bid/update/{id}(id=${bid.bidListId})}" th:object="${bid}" method="post" class="form-horizontal" style="width: 100%">
+		<form action="#" th:action="@{/bidList/update/{id}(id=${bidToBeUpdated.getId()})}" th:object="${bidToBeUpdated}"
+			  method="post"
+			  class="form-horizontal"
+			  style="width: 100%">
 			<!--
-			TODO: Create a form to edit the values of Bid, there are 2 buttons: Update data and Cancel to the list Bid
+			TODO: Create a form to input the values of Bid, there are 2 buttons: Save data and Cancel to the list Bid
 			 -->
+			<div class="d-flex flex-column w-50 ">
+				<label for="account">Account</label>
+				<input type="text" id="account" placeholder="Account" th:field="*{account}" th:value="${bidToBeUpdated.getAccount()}">
+				<label for="type">Type</label>
+				<input type="text" id="type" placeholder="Type" th:field="*{type}"
+					   th:value="${bidToBeUpdated.getType()}">
+				<label for="quantity">Bid quantity</label>
+				<input type="text" id="quantity" placeholder="Bid quantity" th:field="*{bidQuantity}"
+					   th:value="${bidToBeUpdated.getBidQuantity()}">
+			</div>
+			<div>
+				<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+				</button>
+				<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Update BidList
+				</button>
+			</div>
 		</form>
 	</div>
 

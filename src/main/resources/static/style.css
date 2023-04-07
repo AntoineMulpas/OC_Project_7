@@ -6,6 +6,10 @@ body {
     background-color: black;
 }
 
+body a {
+    cursor: pointer;
+}
+
 .login-container {
     display: flex;
     flex-direction: column;
