@@ -42,25 +42,30 @@ public class BidListController {
         if (result.hasErrors()) {
             model.addAttribute("error", result.getErrorCount());
         }
-        return "bidList/add";
+        return "bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+        Bid bidById = bidListService.getBidById(id);
+        model.addAttribute("bidToBeUpdated", bidById);
         // TODO: get Bid by Id and to model then show to the form
         return "bidList/update";
     }
 
     @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid Bid bid,
+    public String updateBid(@PathVariable("id") Integer id, @Valid @ModelAttribute("bid") Bid bid,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
+        bidListService.updateBid(id, bid);
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
+        bidListService.deleteBid(id);
+        model.addAttribute("bidList", bidListService.findAllBids());
         return "redirect:/bidList/list";
     }
 }

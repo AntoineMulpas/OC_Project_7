@@ -22,6 +22,7 @@ public class UserController {
     @RequestMapping("/user/list")
     public String home(Model model)
     {
+        model.addAttribute("remoteUser","Spring Security");
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
