@@ -15,15 +15,20 @@ public class AppSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests()
-                .anyRequest().permitAll()
-                .and()
+                .csrf().disable()
+                .cors().disable()
+                .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("/resources/css/**").permitAll();
+                    authorize.anyRequest().permitAll();
+                })
                 .build();
     }
 
+    /*
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+     */
 
 }

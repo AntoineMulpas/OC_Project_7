@@ -4,7 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <title>Home</title>
-<link rel="stylesheet" href="../../static/bootstrap.min.css" >
+	<link rel="stylesheet" href="/style.css"/>
+	<link rel="stylesheet" type="text/css" href="/bootstrap.min.css" >
 </head>
 <body>
 <div class="container">
@@ -17,7 +18,7 @@
 			<a href="/ruleName/list">Rule</a>
 		</div>
 		<div class="col-6 text-right">
-			Logged in user: <b th:inline="text"  class="user"> [[${#httpServletRequest.remoteUser}]] </b>
+			Logged in user: <b th:inline="text"  class="user"> </b>
 			<form th:action="@{/app-logout}" method="POST">
 				<input type="submit" value="Logout"/>
 			</form>
@@ -39,9 +40,33 @@
 			</thead>
 			<tbody>
 			<!-- TODO: Show all Rating to the table, the Action column will have Edit & Delete buttons -->
+			<tr th:each="rating : ${ratings}" >
+				<td><span th:text="${rating.id}"></span></td>
+				<td><span th:text="${rating.moodysRating}"></span></td>
+				<td><span th:text="${rating.sandPRating}"></span></td>
+				<td><span th:text="${rating.fitchRating}"></span></td>
+				<td><span th:text="${rating.orderNumber}"></span></td>
+
+				<td><span th:data-userid="${rating.id}" onclick="updateId(this.getAttribute('data-userid'))">Edit
+					</span> /
+					<span th:data-userid="${rating.id}" onclick="deleteId(this.getAttribute('data-userid'))">Delete
+					</span></td>
+			</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
 </body>
 </html>
+<script>
+	function updateId(id) {
+		window.open("http://localhost:8080/rating/update/" + id, "_self")
+		console.log("Update: " + id)
+	}
+
+	function deleteId(id) {
+		console.log("Delete: " + id)
+		fetch("http://localhost:8080/rating/delete/" + id)
+				.then(res => window.open("http://localhost:8080/rating/list", "_self"))
+	}
+</script>
