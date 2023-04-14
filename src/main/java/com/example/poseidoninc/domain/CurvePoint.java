@@ -2,6 +2,7 @@ package com.example.poseidoninc.domain;
 
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class CurvePoint {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
+
+    @NotNull
     private Integer curveId;
     private Timestamp asOfDate;
     private Double term;

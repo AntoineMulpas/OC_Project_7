@@ -4,7 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <title>Home</title>
-<link rel="stylesheet" href="../../static/bootstrap.min.css" >
+	<link rel="stylesheet" href="/style.css"/>
+	<link rel="stylesheet" type="text/css" href="/bootstrap.min.css" >
 </head>
 <body>
 <div class="container">
@@ -18,7 +19,20 @@
 			<!--
 			TODO: Create a form to input the values of CurvePoint, there are 2 buttons: Save data and Cancel to the list CurvePoint
 			 -->
-
+			<div class="d-flex flex-column w-50 ">
+				<label for="curveId">Curve Id</label>
+				<input type="text" id="curveId" placeholder="Curve Id" th:field="*{curveId}">
+				<label for="term">Term</label>
+				<input type="text" id="term" placeholder="Term" th:field="*{term}">
+				<label for="value">Value</label>
+				<input type="text" id="value" placeholder="Value" th:field="*{value}">
+			</div>
+			<div>
+				<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+				</button>
+				<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add
+					CurvePoint</button>
+			</div>
 		</form>
 	</div>
 
