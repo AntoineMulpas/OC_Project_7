@@ -4,8 +4,8 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>Home</title>
-	<link rel="stylesheet" href="../../static/bootstrap.min.css" >
-</head>
+	<link rel="stylesheet" href="/style.css"/>
+	<link rel="stylesheet" type="text/css" href="/bootstrap.min.css" ></head>
 <body>
 <div class="container">
 
@@ -14,10 +14,36 @@
 	</div>
 
 	<div class="row">
-		<form action="#" th:action="@{/ruleName/update/{id}(id=${ruleName.id})}" th:object="${ruleName}" method="post" class="form-horizontal" style="width: 100%">
+		<form action="#" th:action="@{/ruleName/update/{id}(id=${ruleName.getId()})}" th:object="${ruleName}"
+			  method="post" class="form-horizontal" style="width: 100%">
 			<!--
 			TODO: Create a form to edit the values of RuleName, there are 2 buttons: Update data and Cancel to the RuleName
 			 -->
+			<div class="d-flex flex-column w-50 ">
+				<label for="name">Name</label>
+				<input type="text" id="name" placeholder="Name" th:field="*{name}" th:value="${ruleName.getName()}">
+				<label for="description">Description</label>
+				<input type="text" id="description" placeholder="Description" th:field="*{description}"
+					   th:value="${ruleName.getDescription()}">
+				<label for="json">Json</label>
+				<input type="text" id="json" placeholder="Json" th:field="*{json}" th:value="${ruleName.getJson()}">
+
+				<label for="template">Template</label>
+				<input type="text" id="template" placeholder="Template" th:field="*{template}"
+					   th:value="${ruleName.getTemplate()}">
+
+				<label for="sql">SQL</label>
+				<input type="text" id="sql" placeholder="SQL" th:field="*{sqlStr}" th:value="${ruleName.getSqlStr()}">
+
+				<label for="sqlPart">sqlPart</label>
+				<input type="text" id="sqlPart" placeholder="sqlPart" th:field="*{sqlPart}" th:value="${ruleName.getSqlPart()}">
+
+			</div>
+			<div>
+				<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+				</button>
+				<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add BidList</button>
+			</div>
 
 		</form>
 	</div>
