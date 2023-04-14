@@ -4,7 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <title>Home</title>
-<link rel="stylesheet" href="../../static/bootstrap.min.css" >
+	<link rel="stylesheet" href="/style.css"/>
+	<link rel="stylesheet" type="text/css" href="/bootstrap.min.css" >
 </head>
 <body>
 <div class="container">
@@ -13,10 +14,28 @@
 	</div>
 
 	<div class="row">
-		<form action="#" th:action="@{/trade/update/{id}(id=${trade.tradeId})}" th:object="${trade}" method="post" class="form-horizontal" style="width: 100%">
+		<form action="#" th:action="@{/trade/update/{id}(id=${trade.getTradeId()})}" th:object="${trade}" method="post"
+			  class="form-horizontal" style="width: 100%">
 			<!--
 			TODO: Create a form to edit the values of Trade, there are 2 buttons: Update data and Cancel to the Trade List
 			 -->
+			<div class="d-flex flex-column w-50 ">
+				<label for="account">Account</label>
+				<input type="text" id="account" placeholder="Account" th:field="*{account}"
+					   th:value="${trade.getAccount()}">
+				<label for="type">Type</label>
+				<input type="text" id="type" placeholder="Type" th:field="*{type}"
+					   th:value="${trade.getType()}">
+				<label for="quantity">Buy quantity</label>
+				<input type="text" id="quantity" placeholder="Buy quantity" th:field="*{buyQuantity}"
+					   th:value="${trade.getBuyQuantity()}">
+			</div>
+			<div>
+				<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+				</button>
+				<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Update BidList
+				</button>
+			</div>
 		</form>
 	</div>
 
