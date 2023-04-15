@@ -23,7 +23,7 @@ public class CurvePoint {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @NotNull
+    @NotNull(message = "must not be null")
     private Integer curveId;
     private Timestamp asOfDate;
     private Double term;

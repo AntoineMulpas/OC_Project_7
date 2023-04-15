@@ -22,6 +22,7 @@
 			<div class="d-flex flex-column w-50 ">
 				<label for="curveId">Curve Id</label>
 				<input type="text" id="curveId" placeholder="Curve Id" th:field="*{curveId}">
+				<span th:errors="*{curveId}"></span>
 				<label for="term">Term</label>
 				<input type="text" id="term" placeholder="Term" th:field="*{term}">
 				<label for="value">Value</label>

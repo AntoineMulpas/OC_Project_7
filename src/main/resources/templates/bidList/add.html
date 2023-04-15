@@ -24,8 +24,10 @@
 				<div class="d-flex flex-column w-50 ">
 					<label for="account">Account</label>
 					<input type="text" id="account" placeholder="Account" th:field="*{account}">
+					<span th:errors="*{account}"></span>
 					<label for="type">Type</label>
 					<input type="text" id="type" placeholder="Type" th:field="*{type}">
+					<span th:errors="*{type}"></span>
 					<label for="quantity">Bid quantity</label>
 					<input type="text" id="quantity" placeholder="Bid quantity" th:field="*{bidQuantity}">
 				</div>
