@@ -70,11 +70,11 @@ public class BidListController {
                              BindingResult result, Model model, Authentication authentication) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
         if (result.hasErrors()) {
-            logger.error("Bid is not valid for user when trying to update: " + authentication.getName());
+            logger.error("Bid is not valid for user when trying to update: " + authentication.getName() + " for bid with id: " + id);
             return "bidList/update";
         }
         bidListService.updateBid(id, bid);
-        logger.info(authentication.getName() + " update a bid." );
+        logger.info(authentication.getName() + " update a bid with id: " + id);
         return "redirect:/bid/list";
     }
 
@@ -83,7 +83,7 @@ public class BidListController {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
         bidListService.deleteBid(id);
         model.addAttribute("bidList", bidListService.findAllBids());
-        logger.info(authentication.getName() + " has deleted bid.");
+        logger.info(authentication.getName() + " has deleted bid with id: " + id);
         return "redirect:/bid/list";
     }
 }
