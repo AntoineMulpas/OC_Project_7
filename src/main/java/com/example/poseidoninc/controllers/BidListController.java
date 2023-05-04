@@ -4,6 +4,8 @@ import com.example.poseidoninc.domain.Bid;
 import com.example.poseidoninc.services.BidListService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,11 +23,13 @@ public class BidListController {
         this.bidListService = bidListService;
     }
 
-    @GetMapping("/bidList/list")
-    public String home(Model model)
+    @GetMapping("/bid/list")
+    public String home(Model model, Authentication authentication)
     {
         model.addAttribute("bidList", bidListService.findAllBids());
         // TODO: call service find all bids to show to the view
+        boolean admin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+        model.addAttribute("admin", admin);
         return "/bidList/list";
     }
 
@@ -40,12 +44,8 @@ public class BidListController {
         if (result.hasErrors()) {
             return "bidList/add";
         }
-        Bid savedBid = bidListService.saveNewBid(bid);
-        model.addAttribute("savedBid", savedBid);
-        if (result.hasErrors()) {
-            model.addAttribute("error", result.getErrorCount());
-        }
-        return "bidList/list";
+        bidListService.saveNewBid(bid);
+        return "redirect:/bid/list";
     }
 
     @GetMapping("/bidList/update/{id}")
@@ -61,7 +61,7 @@ public class BidListController {
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
         bidListService.updateBid(id, bid);
-        return "redirect:/bidList/list";
+        return "redirect:/bid/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
@@ -69,6 +69,6 @@ public class BidListController {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
         bidListService.deleteBid(id);
         model.addAttribute("bidList", bidListService.findAllBids());
-        return "redirect:/bidList/list";
+        return "redirect:/bid/list";
     }
 }

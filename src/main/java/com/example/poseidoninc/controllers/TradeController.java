@@ -4,13 +4,12 @@ import com.example.poseidoninc.domain.Trade;
 import com.example.poseidoninc.services.TradeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,10 +25,12 @@ public class TradeController {
     }
 
     @RequestMapping("/trade/list")
-    public String home(Model model)
+    public String home(Model model, Authentication authentication)
     {
         List <Trade> allTrades = tradeService.getAllTrades();
         model.addAttribute("trades",allTrades);
+        boolean admin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+        model.addAttribute("admin", admin);
         // TODO: find all Trade, add to model
         return "trade/list";
     }
@@ -40,8 +41,11 @@ public class TradeController {
     }
 
     @PostMapping("/trade/validate")
-    public String validate(@Valid Trade trade, BindingResult result, Model model) {
+    public String validate(@Valid @ModelAttribute("trade") Trade trade, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return Trade list
+        if (result.hasErrors()) {
+            return "trade/add";
+        }
         tradeService.saveTrade(trade);
         return "redirect:/trade/list";
     }

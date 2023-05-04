@@ -1,5 +1,6 @@
 package com.example.poseidoninc.domain;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,12 +21,15 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    @NotNull
+    @NotBlank(message = "MoodysRating is mandatory")
     private String moodysRating;
-    @NotNull
+
+    @NotBlank(message = "SandPRating is mandatory")
     private String sandPRating;
-    @NotNull
+
+    @NotBlank(message = "Fitchrating is mandatory")
     private String fitchRating;
-    @NotNull
+
+    @NotNull(message = "OrderNumber is mandatory")
     private Integer orderNumber;
 }

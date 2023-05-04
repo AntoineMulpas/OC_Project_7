@@ -25,13 +25,17 @@
 				<span th:errors="*{curveId}"></span>
 				<label for="term">Term</label>
 				<input type="text" id="term" placeholder="Term" th:field="*{term}">
+				<span th:errors="*{term}"></span>
 				<label for="value">Value</label>
 				<input type="text" id="value" placeholder="Value" th:field="*{value}">
+				<span th:errors="*{value}"></span>
+
 			</div>
 			<div>
-				<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+				<button type="reset" class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px"
+						onclick={cancel()}>Cancel
 				</button>
-				<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add
+				<button type="submit" class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add
 					CurvePoint</button>
 			</div>
 		</form>
@@ -40,3 +44,8 @@
 </div>
 </body>
 </html>
+<script th:inline="javascript">
+	const cancel = () => {
+		window.location.href = "/curvePoint/list"
+	}
+</script>

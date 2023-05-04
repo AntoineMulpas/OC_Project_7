@@ -22,23 +22,32 @@
 			<div class="d-flex flex-column w-50 ">
 				<label for="name">Name</label>
 				<input type="text" id="name" placeholder="Name" th:field="*{name}">
+				<span th:errors="*{name}"></span>
+
 				<label for="description">Description</label>
 				<input type="text" id="description" placeholder="Description" th:field="*{description}">
+				<span th:errors="*{description}"></span>
+
 				<label for="json">Json</label>
 				<input type="text" id="json" placeholder="Json" th:field="*{json}">
+				<span th:errors="*{json}"></span>
 
 				<label for="template">Template</label>
 				<input type="text" id="template" placeholder="Template" th:field="*{template}">
+				<span th:errors="*{template}"></span>
 
 				<label for="sql">SQL</label>
 				<input type="text" id="sql" placeholder="SQL" th:field="*{sqlStr}">
+				<span th:errors="*{sqlStr}"></span>
 
 				<label for="sqlPart">sqlPart</label>
 				<input type="text" id="sqlPart" placeholder="sqlPart" th:field="*{sqlPart}">
+				<span th:errors="*{sqlPart}"></span>
 
 			</div>
 			<div>
-				<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+				<button type="reset" class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px"
+				onclick={cancel()}>Cancel
 				</button>
 				<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add BidList</button>
 			</div>
@@ -49,3 +58,8 @@
 </div>
 </body>
 </html>
+<script th:inline="javascript">
+	const cancel = () => {
+		window.location.href = "/ruleName/list"
+	}
+</script>

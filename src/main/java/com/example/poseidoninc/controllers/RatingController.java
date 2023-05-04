@@ -4,13 +4,12 @@ import com.example.poseidoninc.domain.Rating;
 import com.example.poseidoninc.services.RatingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,11 +23,13 @@ public class RatingController {
     }
 
     @RequestMapping("/rating/list")
-    public String home(Model model)
+    public String home(Model model, Authentication authentication)
     {
         // TODO: find all Rating, add to model
         List <Rating> allRating = ratingService.getAllRating();
         model.addAttribute("ratings", allRating);
+        boolean admin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+        model.addAttribute("admin", admin);
         return "rating/list";
     }
 
@@ -38,8 +39,11 @@ public class RatingController {
     }
 
     @PostMapping("/rating/validate")
-    public String validate(@Valid Rating rating, BindingResult result, Model model) {
+    public String validate(@Valid @ModelAttribute("rating") Rating rating, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return Rating list
+        if (result.hasErrors()) {
+            return "rating/add";
+        }
         ratingService.addNewRating(rating);
         return "redirect:/rating/list";
     }

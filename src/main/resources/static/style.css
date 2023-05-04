@@ -26,3 +26,36 @@ body a {
     padding: 5px;
     margin: 2px;
 }
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container form {
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.login-submit {
+    margin-top: 4px;
+}
+
+.login-form-display {
+    display: flex;
+    margin: 1px;
+}
+
+.login-form-display input {
+    margin-left: 4px;
+}
+
+.home-container {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+}

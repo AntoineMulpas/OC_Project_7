@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Admin</title>
+
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/bootstrap.min.css" >
+</head>
+<body>
+<div class="col-6">
+  <a href="/bid/list">Bid List</a>&nbsp;|&nbsp;
+  <a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
+  <a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
+  <a href="/trade/list">Trade</a>&nbsp;|&nbsp;
+  <a href="/ruleName/list">Rule</a> |
+  <a th:if="${admin}" href="/admin/home">Home</a>
+</div>
+<div class="home-container">
+<h1>Welcome to Poseidon Inc.</h1>
+<p>Manage user: <a href="/user/list">User management</a><p></p>
+</div>
+
+</body>
+</html>

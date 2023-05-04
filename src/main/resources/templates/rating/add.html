@@ -22,17 +22,22 @@
 			<div class="d-flex flex-column w-50 ">
 				<label for="moodyesrating">MoodysRating</label>
 				<input type="text" id="moodyesrating" placeholder="MoodysRating" th:field="*{moodysRating}">
+				<span th:errors="*{moodysRating}"></span>
 				<label for="SandPRating">SandPRating</label>
 				<input type="text" id="SandPRating" placeholder="SandPRating" th:field="*{sandPRating}">
+				<span th:errors="*{sandPRating}"></span>
 				<label for="FitchRating">FitchRating</label>
 				<input type="text" id="FitchRating" placeholder="FitchRating" th:field="*{fitchRating}">
+				<span th:errors="*{fitchRating}"></span>
 				<label for="order">Order</label>
 				<input type="text" id="order" placeholder="Order" th:field="*{orderNumber}">
+				<span th:errors="*{orderNumber}"></span>
 			</div>
 			<div>
-				<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+				<button type="reset" class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px"
+				onclick={cancel()}>Cancel
 				</button>
-				<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add
+				<button type="submit" class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add
 					Rating</button>
 			</div>
 
@@ -42,3 +47,8 @@
 </div>
 </body>
 </html>
+<script th:inline="javascript">
+	const cancel = () => {
+		window.location.href = "/rating/list"
+	}
+</script>

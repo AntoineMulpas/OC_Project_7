@@ -1,5 +1,7 @@
 package com.example.poseidoninc.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +16,11 @@ public class HomeController
 	}
 
 	@RequestMapping("/admin/home")
-	public String adminHome(Model model)
+	public String adminHome(Model model, Authentication authentication)
 	{
-		return "redirect:/bidList/list";
+		boolean admin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+		model.addAttribute("admin", admin);
+		return "home-admin";
 	}
 
 

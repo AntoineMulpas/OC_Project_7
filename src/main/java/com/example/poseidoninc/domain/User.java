@@ -1,16 +1,20 @@
 package com.example.poseidoninc.domain;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "users")
@@ -24,7 +28,7 @@ public class User  implements UserDetails {
     private Integer id;
     @NotBlank(message = "Username is mandatory")
     private String username;
-    @NotBlank(message = "Password is mandatory")
+    //@Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d).*$\n", message = "Password is not of correct type.")
     private String password;
     @NotBlank(message = "FullName is mandatory")
     private String fullname;
@@ -34,7 +38,7 @@ public class User  implements UserDetails {
 
     @Override
     public Collection <? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singleton(new SimpleGrantedAuthority(role));
     }
 
     @Override

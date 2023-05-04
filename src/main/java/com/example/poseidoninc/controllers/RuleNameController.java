@@ -4,13 +4,12 @@ import com.example.poseidoninc.domain.RuleName;
 import com.example.poseidoninc.services.RuleNameService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,11 +26,13 @@ public class RuleNameController {
     }
 
     @RequestMapping("/ruleName/list")
-    public String home(Model model)
+    public String home(Model model, Authentication authentication)
     {
         // TODO: find all RuleName, add to model
         List <RuleName> allRules = ruleNameService.getAllRules();
         model.addAttribute("rules", allRules);
+        boolean admin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+        model.addAttribute("admin", admin);
         return "ruleName/list";
     }
 
@@ -41,8 +42,11 @@ public class RuleNameController {
     }
 
     @PostMapping("/ruleName/validate")
-    public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
+    public String validate(@Valid @ModelAttribute("ruleName") RuleName ruleName, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return RuleName list
+        if (result.hasErrors()) {
+            return "ruleName/add";
+        }
         ruleNameService.saveRule(ruleName);
         return "redirect:/ruleName/list";
     }

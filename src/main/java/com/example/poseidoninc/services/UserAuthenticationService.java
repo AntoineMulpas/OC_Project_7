@@ -2,7 +2,7 @@ package com.example.poseidoninc.services;
 
 import com.example.poseidoninc.domain.User;
 import com.example.poseidoninc.repositories.UserRepository;
-import com.example.poseidoninc.security.CustomPassordEncoder;
+import com.example.poseidoninc.security.CustomPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,11 +14,11 @@ import java.util.Optional;
 @Service
 public class UserAuthenticationService implements UserDetailsService {
 
-    private final UserRepository       userRepository;
-    private final CustomPassordEncoder passwordEncoder;
+    private final UserRepository        userRepository;
+    private final CustomPasswordEncoder passwordEncoder;
 
 
-    public UserAuthenticationService(UserRepository userRepository, CustomPassordEncoder passwordEncoder) {
+    public UserAuthenticationService(UserRepository userRepository, CustomPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -69,4 +69,25 @@ public class UserAuthenticationService implements UserDetailsService {
     public List <User> findAllUsers() {
         return userRepository.findAll();
     }
+
+    public User findUserById(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public void deleteUserById(Integer id) {
+        userRepository.deleteById(id);
+    }
+
+
+    public User updateUser(Integer id, User user) {
+        Optional <User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            optionalUser.get().setFullname(user.getFullname());
+            optionalUser.get().setPassword(user.getPassword());
+            optionalUser.get().setRole(user.getRole());
+            return userRepository.save(optionalUser.get());
+        }
+        return null;
+    }
+
 }

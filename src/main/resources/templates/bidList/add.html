@@ -22,19 +22,27 @@
 			TODO: Create a form to input the values of Bid, there are 2 buttons: Save data and Cancel to the list Bid
 			 -->
 				<div class="d-flex flex-column w-50 ">
+
 					<label for="account">Account</label>
 					<input type="text" id="account" placeholder="Account" th:field="*{account}">
 					<span th:errors="*{account}"></span>
+
 					<label for="type">Type</label>
 					<input type="text" id="type" placeholder="Type" th:field="*{type}">
 					<span th:errors="*{type}"></span>
+
 					<label for="quantity">Bid quantity</label>
 					<input type="text" id="quantity" placeholder="Bid quantity" th:field="*{bidQuantity}">
+					<span th:errors="*{bidQuantity}"></span>
+
 				</div>
 				<div>
-					<button class="bg-danger m-1 p-1" style="color: white; border: none; border-radius: 5px">Cancel
+					<button type="reset" class="bg-danger m-1 p-1"
+							style="color: white; border: none; border-radius: 5px" onclick={cancel()}>Cancel
 					</button>
-					<button class="bg-primary m-1 p-1" style="color: white; border: none; border-radius: 5px">Add BidList</button>
+					<button type="submit" class="bg-primary m-1 p-1"
+							style="color: white; border: none; border-radius: 5px">Add
+						BidList</button>
 				</div>
 		</form>
 	</div>
@@ -42,3 +50,8 @@
 </div>
 </body>
 </html>
+<script th:inline="javascript">
+const cancel = () => {
+window.location.href = "/bid/list"
+}
+</script>
