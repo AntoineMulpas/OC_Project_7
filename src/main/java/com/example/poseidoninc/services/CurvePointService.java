@@ -30,9 +30,13 @@ public class CurvePointService {
         return curvePointRepository.findAll();
     }
 
-    public void deleteCurvePointById(Integer id) {
+    public boolean deleteCurvePointById(Integer id) {
         Optional <CurvePoint> optionalCurvePoint = curvePointRepository.findById(id);
-        optionalCurvePoint.ifPresent(curvePointRepository::delete);
+        if (optionalCurvePoint.isPresent()) {
+            curvePointRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     public CurvePoint findById(Integer id) {
@@ -40,12 +44,12 @@ public class CurvePointService {
     }
 
     public CurvePoint updateCurvePoint(Integer id, CurvePoint curvePoint) {
-        CurvePoint curvePointToSave = findById(id);
-        if (curvePointToSave != null) {
-            curvePointToSave.setCurveId(curvePoint.getCurveId());
-            curvePointToSave.setTerm(curvePoint.getTerm());
-            curvePointToSave.setValue(curvePoint.getValue());
-            return curvePointRepository.save(curvePointToSave);
+        Optional <CurvePoint> optionalCurvePoint = curvePointRepository.findById(id);
+        if (optionalCurvePoint.isPresent()) {
+            optionalCurvePoint.get().setCurveId(curvePoint.getCurveId());
+            optionalCurvePoint.get().setTerm(curvePoint.getTerm());
+            optionalCurvePoint.get().setValue(curvePoint.getValue());
+            return curvePointRepository.save(optionalCurvePoint.get());
         }
         return null;
     }

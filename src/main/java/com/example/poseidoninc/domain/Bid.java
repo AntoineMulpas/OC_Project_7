@@ -50,4 +50,11 @@ public class Bid {
     private String dealType;
     private String sourceListId;
     private String side;
+
+    public Bid(Integer id, String account, String type, Double bidQuantity) {
+        this.id = id;
+        this.account = account;
+        this.type = type;
+        this.bidQuantity = bidQuantity;
+    }
 }

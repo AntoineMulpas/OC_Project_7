@@ -22,30 +22,34 @@ public class RuleNameService {
         return ruleNameRepository.findAll();
     }
 
-    public void saveRule(RuleName ruleName) {
-        ruleNameRepository.save(ruleName);
+    public RuleName saveRule(RuleName ruleName) {
+        return ruleNameRepository.save(ruleName);
     }
 
     public RuleName findRuleById(Integer id) {
         return ruleNameRepository.findById(id).orElse(null);
     }
 
-    public void updateRuleName(Integer id, RuleName ruleName) {
+    public RuleName updateRuleName(Integer id, RuleName ruleName) {
         Optional <RuleName> optionalRuleName = ruleNameRepository.findById(id);
         if (optionalRuleName.isPresent()) {
-            RuleName ruleToUpdate = optionalRuleName.get();
-            ruleToUpdate.setName(ruleName.getName());
-            ruleToUpdate.setDescription(ruleName.getDescription());
-            ruleToUpdate.setJson(ruleName.getJson());
-            ruleToUpdate.setTemplate(ruleName.getTemplate());
-            ruleToUpdate.setSqlStr(ruleName.getSqlStr());
-            ruleToUpdate.setSqlPart(ruleName.getSqlPart());
-            ruleNameRepository.save(ruleToUpdate);
+            optionalRuleName.get().setName(ruleName.getName());
+            optionalRuleName.get().setDescription(ruleName.getDescription());
+            optionalRuleName.get().setJson(ruleName.getJson());
+            optionalRuleName.get().setTemplate(ruleName.getTemplate());
+            optionalRuleName.get().setSqlStr(ruleName.getSqlStr());
+            optionalRuleName.get().setSqlPart(ruleName.getSqlPart());
+            return ruleNameRepository.save(optionalRuleName.get());
         }
+        return null;
     }
 
-    public void deleteRuleNameById(Integer id) {
-        ruleNameRepository.deleteById(id);
+    public boolean deleteRuleNameById(Integer id) {
+        if (ruleNameRepository.findById(id).isPresent()) {
+            ruleNameRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 }

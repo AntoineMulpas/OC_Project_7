@@ -21,27 +21,32 @@ public class TradeService {
         return tradeRepository.findAll();
     }
 
-    public void saveTrade(Trade trade) {
-        tradeRepository.save(trade);
+    public Trade saveTrade(Trade trade) {
+        return tradeRepository.save(trade);
     }
 
     public Trade findTradeById(Integer id) {
         return tradeRepository.findById(id).orElse(null);
     }
 
-    public void updateTrade(Integer id, Trade trade) {
+    public Trade updateTrade(Integer id, Trade trade) {
         Optional <Trade> optionalTrade = tradeRepository.findById(id);
         if (optionalTrade.isPresent()) {
             Trade tradeToUpdate = optionalTrade.get();
             tradeToUpdate.setAccount(trade.getAccount());
             tradeToUpdate.setType(trade.getType());
             tradeToUpdate.setBuyQuantity(trade.getBuyQuantity());
-            tradeRepository.save(tradeToUpdate);
+            return tradeRepository.save(tradeToUpdate);
         }
+        return null;
     }
 
-    public void deleteTradeById(Integer id) {
-        tradeRepository.deleteById(id);
+    public boolean deleteTradeById(Integer id) {
+        if (tradeRepository.findById(id).isPresent()) {
+            tradeRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 }

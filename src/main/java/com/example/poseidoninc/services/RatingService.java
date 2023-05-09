@@ -26,11 +26,13 @@ public class RatingService {
         return ratingRepository.findAll();
     }
 
-    public void deleteRatingById(Integer id) {
+    public boolean deleteRatingById(Integer id) {
         Optional <Rating> optionalRating = ratingRepository.findById(id);
         if (optionalRating.isPresent()) {
             ratingRepository.deleteById(id);
+            return true;
         }
+        return false;
     }
 
     public Rating getRatingById(Integer id) {
@@ -38,16 +40,16 @@ public class RatingService {
         return optionalRating.orElse(null);
     }
 
-    public void updateRatingById(Integer id, Rating rating) {
+    public Rating updateRatingById(Integer id, Rating rating) {
         Optional <Rating> optionalRating = ratingRepository.findById(id);
         if (optionalRating.isPresent()) {
-            Rating ratingToBeUpdated = optionalRating.get();
-            ratingToBeUpdated.setMoodysRating(rating.getMoodysRating());
-            ratingToBeUpdated.setSandPRating(rating.getSandPRating());
-            ratingToBeUpdated.setFitchRating(rating.getFitchRating());
-            ratingToBeUpdated.setOrderNumber(rating.getOrderNumber());
-            ratingRepository.save(ratingToBeUpdated);
+            optionalRating.get().setMoodysRating(rating.getMoodysRating());
+            optionalRating.get().setSandPRating(rating.getSandPRating());
+            optionalRating.get().setFitchRating(rating.getFitchRating());
+            optionalRating.get().setOrderNumber(rating.getOrderNumber());
+            return ratingRepository.save(optionalRating.get());
         }
+        return null;
     }
 
 }
