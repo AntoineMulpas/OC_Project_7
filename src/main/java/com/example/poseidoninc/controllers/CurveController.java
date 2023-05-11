@@ -41,7 +41,7 @@ public class CurveController {
     }
 
     @GetMapping("/curvePoint/add")
-    public String addBidForm(CurvePoint bid, Authentication authentication) {
+    public String addForm(CurvePoint bid, Authentication authentication) {
         logger.info(authentication.getName() + " has requested page to add new curve.");
         return "curvePoint/add";
     }
@@ -81,7 +81,6 @@ public class CurveController {
 
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model, Authentication authentication) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
         curvePointService.deleteCurvePointById(id);
         logger.info(authentication.getName() + " has delete Curve with id " + id);
         return "redirect:/curvePoint/list";

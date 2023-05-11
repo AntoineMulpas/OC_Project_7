@@ -17,7 +17,6 @@ import java.util.List;
 
 @Controller
 public class RatingController {
-    // TODO: Inject Rating service
     private final RatingService ratingService;
 
     private static final Logger logger = LogManager.getLogger(RatingController.class);
@@ -30,7 +29,6 @@ public class RatingController {
     @RequestMapping("/rating/list")
     public String home(Model model, Authentication authentication)
     {
-        // TODO: find all Rating, add to model
         List <Rating> allRating = ratingService.getAllRating();
         model.addAttribute("ratings", allRating);
         boolean admin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));

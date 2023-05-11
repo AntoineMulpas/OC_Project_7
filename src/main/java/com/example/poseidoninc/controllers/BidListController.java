@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class BidListController {
-    // TODO: Inject Bid service
 
     private final BidListService bidListService;
 
@@ -33,7 +32,6 @@ public class BidListController {
     {
         logger.info(authentication.getName() + " fetches all bids.");
         model.addAttribute("bidList", bidListService.findAllBids());
-        // TODO: call service find all bids to show to the view
         boolean admin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
         model.addAttribute("admin", admin);
         return "/bidList/list";
@@ -47,7 +45,6 @@ public class BidListController {
 
     @PostMapping("/bid/validate")
     public String validate(@Valid @ModelAttribute("bid") Bid bid, BindingResult result, Model model, Authentication authentication) {
-        // TODO: check data valid and save to db, after saving return bid list
         if (result.hasErrors()) {
             logger.error("Bid is not valid for user " + authentication.getName());
             return "bidList/add";
@@ -68,7 +65,6 @@ public class BidListController {
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid @ModelAttribute("bid") Bid bid,
                              BindingResult result, Model model, Authentication authentication) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
         if (result.hasErrors()) {
             logger.error("Bid is not valid for user when trying to update: " + authentication.getName() + " for bid with id: " + id);
             return "bidList/update";
@@ -80,7 +76,6 @@ public class BidListController {
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model, Authentication authentication) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
         bidListService.deleteBid(id);
         model.addAttribute("bidList", bidListService.findAllBids());
         logger.info(authentication.getName() + " has deleted bid with id: " + id);

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class UserAuthenticationService implements UserDetailsService {
 
-    private final UserRepository        userRepository;
+    private final UserRepository userRepository;
     private final CustomPasswordEncoder passwordEncoder;
 
 
@@ -47,7 +47,7 @@ public class UserAuthenticationService implements UserDetailsService {
 
         User userToSave = new User(
                 user.getUsername(),
-                passwordEncoder.passwordEncoder().encode(user.getPassword()),
+                passwordEncoder.encodePassword(user.getPassword()),
                 user.getFullname(),
                 user.getRole()
         );
@@ -74,8 +74,12 @@ public class UserAuthenticationService implements UserDetailsService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public void deleteUserById(Integer id) {
-        userRepository.deleteById(id);
+    public boolean deleteUserById(Integer id) {
+        if (userRepository.findById(id).isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 
