@@ -72,13 +72,15 @@ class BidListControllerTest {
     }
 
     @Test
-    @WithMockUser
-    void validate() throws Exception {
+    @WithMockUser(authorities = {"ADMIN"})
+    void validateShouldNotWork() throws Exception {
         when(bidListService.saveNewBid(any())).thenReturn(new Bid());
+        Bid bid = new Bid(1, "test", "test", 10.1);
         mockMvc.perform(post("/bid/validate")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new Bid(1, "test", "test", 10.1))))
+                        .content(new ObjectMapper().writeValueAsString(bid))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 

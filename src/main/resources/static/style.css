@@ -1,9 +1,10 @@
 body {
-    width: 100%;
+    width: 100vw;
     display: flex;
     align-items: center;
     flex-direction: column;
     background-color: black;
+    overflow-x: hidden;
 }
 
 body a {
@@ -58,4 +59,10 @@ body a {
     margin: 1em;
     display: flex;
     flex-direction: column;
+}
+
+.logo-container {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }

@@ -56,6 +56,7 @@ public class AppSecurityConfig {
                     authorize.requestMatchers("/style.css").permitAll();
                     authorize.requestMatchers("/bootstrap.min.css").permitAll();
                     authorize.requestMatchers("/app/login").permitAll();
+                    authorize.requestMatchers("/img/**").permitAll();
                     authorize.requestMatchers("/user/**").hasAuthority("ADMIN");
                     authorize.requestMatchers("/admin/**").hasAuthority("ADMIN");
                     authorize.anyRequest().authenticated();
