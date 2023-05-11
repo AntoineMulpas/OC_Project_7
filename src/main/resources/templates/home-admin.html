@@ -20,7 +20,8 @@
 </div>
 <div class="home-container">
 <h1>Welcome to Poseidon Inc.</h1>
-<p>Manage user: <a href="/user/list">User management</a><p></p>
+    <p>Logged as <span th:text="${#authentication.name}"></span></p>
+    <p>Manage user: <a href="/user/list">User management</a><p></p>
 </div>
 
 </body>

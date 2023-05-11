@@ -15,8 +15,12 @@
 		<div class="col-6">
 
 		</div>
-		<div class="col-6 text-right">
-			<a href="/admin/home">Home</a>&nbsp;|&nbsp;<a href="/logout">Logout</a>
+		<div class="col-6 text-right d-flex">
+			<a href="/admin/home">Home</a>&nbsp;|&nbsp;
+			<p>Logged as <span th:text="${#authentication.name}"></span></p> |
+			<form th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"/>
+		</form>
 		</div>
 	</div>
 	<div class="row"><h2>User List</h2></div>
