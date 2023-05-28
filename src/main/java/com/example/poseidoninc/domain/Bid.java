@@ -57,4 +57,10 @@ public class Bid {
         this.type = type;
         this.bidQuantity = bidQuantity;
     }
+
+    public Bid(String account, String type, Double bidQuantity) {
+        this.account = account;
+        this.type = type;
+        this.bidQuantity = bidQuantity;
+    }
 }

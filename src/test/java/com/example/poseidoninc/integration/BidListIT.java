@@ -16,7 +16,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -40,6 +43,27 @@ public class BidListIT {
                     List<?> bidList = (List<?>) Objects.requireNonNull(result.getModelAndView()).getModel().get("bidList");
                     assertEquals(2, bidList.size());
                 });
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void validateShouldNotWork() throws Exception {
+        Bid bid = new Bid(null, "test", 10.1);
+        mockMvc.perform(post("/bid/validate")
+                        .with(csrf())
+                        .flashAttr("bid", bid))
+                .andExpect(status().is4xxClientError());
+    }
+
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void validateReturnsStatus302() throws Exception {
+        Bid bid = new Bid("test", "test", 10.1);
+        mockMvc.perform(post("/bid/validate")
+                        .with(csrf())
+                        .flashAttr("bid", bid))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test

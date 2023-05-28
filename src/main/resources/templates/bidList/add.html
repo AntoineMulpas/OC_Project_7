@@ -16,7 +16,8 @@
 	</div>
 
 	<div class="row">
-		<form action="#" th:action="@{/bid/validate}" th:object="${bid}" method="post" class="form-horizontal"
+		<form action="#" th:action="@{/bid/validate}" th:object="${bid}"  method="post"
+			  class="form-horizontal"
 			  style="width: 100%">
 			<!--
 			TODO: Create a form to input the values of Bid, there are 2 buttons: Save data and Cancel to the list Bid
@@ -34,6 +35,7 @@
 					<label for="quantity">Bid quantity</label>
 					<input type="text" id="quantity" placeholder="Bid quantity" th:field="*{bidQuantity}">
 					<span th:errors="*{bidQuantity}"></span>
+
 
 				</div>
 				<div>

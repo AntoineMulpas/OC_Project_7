@@ -14,11 +14,17 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -56,7 +62,36 @@ class CurveControllerTest {
 
     @Test
     @WithMockUser
-    void validate() {
+    void validate() throws Exception {
+        CurvePoint curvePoint = new CurvePoint(
+                1,
+                2,
+                Timestamp.valueOf(LocalDateTime.now()),
+                2.1,
+                2.3,
+                Timestamp.valueOf(LocalDateTime.now())
+        );
+        mockMvc.perform(post("/curvePoint/validate")
+                        .with(csrf())
+                        .flashAttr("curvePoint", curvePoint))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    void validateShouldNotWorkIfCurveIdIsNull() throws Exception {
+        CurvePoint curvePoint = new CurvePoint(
+                1,
+                null,
+                Timestamp.valueOf(LocalDateTime.now()),
+                2.1,
+                2.3,
+                Timestamp.valueOf(LocalDateTime.now())
+        );
+        mockMvc.perform(post("/curvePoint/validate")
+                        .with(csrf())
+                        .flashAttr("curvePoint", curvePoint))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -69,12 +104,41 @@ class CurveControllerTest {
 
     @Test
     @WithMockUser
-    void updateBid() {
+    void updateCurvePoint() throws Exception {
+        CurvePoint curvePoint = new CurvePoint(
+                1,
+                1,
+                Timestamp.valueOf(LocalDateTime.now()),
+                2.1,
+                2.3,
+                Timestamp.valueOf(LocalDateTime.now())
+        );
+        mockMvc.perform(post("/curvePoint/update/1")
+                        .with(csrf())
+                        .flashAttr("curvePoint", curvePoint))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
     @WithMockUser
-    void deleteBid() throws Exception {
+    void updateCurvePointIfCurveIdIsNull() throws Exception {
+        CurvePoint curvePoint = new CurvePoint(
+                1,
+                null,
+                Timestamp.valueOf(LocalDateTime.now()),
+                2.1,
+                2.3,
+                Timestamp.valueOf(LocalDateTime.now())
+        );
+        mockMvc.perform(post("/curvePoint/update/1")
+                        .with(csrf())
+                        .flashAttr("curvePoint", curvePoint))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void deleteCurvePoint() throws Exception {
         when(curvePointService.deleteCurvePointById(1)).thenReturn(true);
         mockMvc.perform(MockMvcRequestBuilders.get("/curvePoint/delete/1"))
                 .andExpect(status().is3xxRedirection());

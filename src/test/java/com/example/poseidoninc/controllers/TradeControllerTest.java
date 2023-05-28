@@ -20,6 +20,8 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -55,7 +57,34 @@ class TradeControllerTest {
     }
 
     @Test
-    void validate() {
+    @WithMockUser
+    void validate() throws Exception {
+        Trade trade = new Trade(
+                "Test",
+                "Test",
+                10.2
+        );
+
+        mockMvc.perform(post("/trade/validate")
+                        .with(csrf())
+                        .flashAttr("trade", trade))
+                .andExpect(status().is3xxRedirection());
+    }
+
+
+    @Test
+    @WithMockUser
+    void validateIfAccountIsNull() throws Exception {
+        Trade trade = new Trade(
+                null,
+                "Test",
+                10.2
+        );
+
+        mockMvc.perform(post("/trade/validate")
+                        .with(csrf())
+                        .flashAttr("trade", trade))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -67,7 +96,35 @@ class TradeControllerTest {
     }
 
     @Test
-    void updateTrade() {
+    @WithMockUser
+    void updateTrade() throws Exception {
+        Trade trade = new Trade(
+                1,
+                "test",
+                "Test",
+                10.2
+        );
+
+        mockMvc.perform(post("/trade/update/1")
+                        .with(csrf())
+                        .flashAttr("trade", trade))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    void updateTradeShouldNotWorkIfAccountIsNull() throws Exception {
+        Trade trade = new Trade(
+                1,
+                null,
+                "Test",
+                10.2
+        );
+
+        mockMvc.perform(post("/trade/update/1")
+                        .with(csrf())
+                        .flashAttr("trade", trade))
+                .andExpect(status().isOk());
     }
 
     @Test

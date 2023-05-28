@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -25,6 +26,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
@@ -51,6 +53,10 @@ class BidListControllerTest {
     @MockBean
     UserAuthenticationService userAuthenticationService;
 
+    public MethodValidationPostProcessor bean() {
+        return new MethodValidationPostProcessor();
+    }
+
 
     @Test
     @WithMockUser
@@ -75,13 +81,22 @@ class BidListControllerTest {
     @WithMockUser(authorities = {"ADMIN"})
     void validateShouldNotWork() throws Exception {
         when(bidListService.saveNewBid(any())).thenReturn(new Bid());
-        Bid bid = new Bid(1, "test", "test", 10.1);
+        Bid bid = new Bid(null, "test", 10.1);
         mockMvc.perform(post("/bid/validate")
                         .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(bid))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                        .flashAttr("bid", bid))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void validateReturnsStatus302() throws Exception {
+        when(bidListService.saveNewBid(any())).thenReturn(new Bid());
+        Bid bid = new Bid("test", "test", 10.1);
+        mockMvc.perform(post("/bid/validate")
+                        .with(csrf())
+                        .flashAttr("bid", bid))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -94,16 +109,26 @@ class BidListControllerTest {
 
     @Test
     @WithMockUser
-    @Disabled
     void updateBid() throws Exception {
         Bid bid = new Bid(1, "test", "test", 10.1);
         when(bidListService.updateBid(1, bid)).thenReturn(bid);
 
         mockMvc.perform(post("/bidList/update/1")
                 .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(bid)))
+                .flashAttr("bid", bid))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    void updateBidShouldReturns4xx() throws Exception {
+        Bid bid = new Bid(1, null, "test", 10.1);
+        when(bidListService.updateBid(1, bid)).thenReturn(bid);
+
+        mockMvc.perform(post("/bidList/update/1")
+                        .with(csrf())
+                        .flashAttr("bid", bid))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test

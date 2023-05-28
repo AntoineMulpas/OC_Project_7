@@ -1,5 +1,6 @@
 package com.example.poseidoninc.integration;
 
+import com.example.poseidoninc.controllers.UserController;
 import com.example.poseidoninc.domain.User;
 import com.example.poseidoninc.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,6 +27,9 @@ public class UserIT {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private UserController userController;
+
     @MockBean
     private UserRepository userRepository;
 
@@ -39,6 +44,16 @@ public class UserIT {
                     List < ? > list = (List <?>) result.getModelAndView().getModel().get("users");
                     assertEquals(2, list.size());
                 });
+    }
+
+    @Test
+    void addNewUser() throws Exception {
+        String text = "{\"username\":\"antoine\",\"password\":\"Password12@\",\"fullname\":\"antoine\",\"role\":\"ADMIN\"}";
+        User user = new User("antoine", "Password12@", "antoine", "ADMIN");
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/add")
+                        .content(text)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test

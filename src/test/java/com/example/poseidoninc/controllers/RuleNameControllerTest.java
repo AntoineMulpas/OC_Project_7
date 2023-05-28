@@ -20,6 +20,8 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -55,7 +57,41 @@ class RuleNameControllerTest {
     }
 
     @Test
-    void validate() {
+    @WithMockUser
+    void validate() throws Exception {
+        RuleName ruleName = new RuleName(
+                1,
+                "test",
+                "test",
+                "test",
+                "test",
+                "test",
+                "test"
+        );
+
+        mockMvc.perform(post("/ruleName/validate")
+                        .with(csrf())
+                        .flashAttr("ruleName", ruleName))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    void validateShouldNotWorkIfNameIsNull() throws Exception {
+        RuleName ruleName = new RuleName(
+                1,
+                null,
+                "test",
+                "test",
+                "test",
+                "test",
+                "test"
+        );
+
+        mockMvc.perform(post("/ruleName/validate")
+                        .with(csrf())
+                        .flashAttr("ruleName", ruleName))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -67,7 +103,41 @@ class RuleNameControllerTest {
     }
 
     @Test
-    void updateRuleName() {
+    @WithMockUser
+    void updateRuleName() throws Exception {
+        RuleName ruleName = new RuleName(
+                1,
+                "test",
+                "test",
+                "test",
+                "test",
+                "test",
+                "test"
+        );
+
+        mockMvc.perform(post("/ruleName/update/1")
+                        .with(csrf())
+                        .flashAttr("ruleName", ruleName))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    void updateRuleNameShouldNotWorkIsNameIsNull() throws Exception {
+        RuleName ruleName = new RuleName(
+                1,
+                null,
+                "test",
+                "test",
+                "test",
+                "test",
+                "test"
+        );
+
+        mockMvc.perform(post("/ruleName/update/1")
+                        .with(csrf())
+                        .flashAttr("ruleName", ruleName))
+                .andExpect(status().isOk());
     }
 
     @Test

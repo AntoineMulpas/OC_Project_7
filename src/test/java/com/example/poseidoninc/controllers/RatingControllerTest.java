@@ -20,6 +20,8 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -56,7 +58,35 @@ class RatingControllerTest {
     }
 
     @Test
-    void validate() {
+    @WithMockUser
+    void validate() throws Exception {
+        Rating rating = new Rating(
+                1,
+                "test",
+                "test",
+                "test",
+                12
+        );
+        mockMvc.perform(post("/rating/validate")
+                        .with(csrf())
+                        .flashAttr("rating", rating))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    void validateShouldNotWorkIsOrderNumberIsNull() throws Exception {
+        Rating rating = new Rating(
+                1,
+                "test",
+                "test",
+                "test",
+                null
+        );
+        mockMvc.perform(post("/rating/validate")
+                        .with(csrf())
+                        .flashAttr("rating", rating))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -68,7 +98,35 @@ class RatingControllerTest {
     }
 
     @Test
-    void updateRating() {
+    @WithMockUser
+    void updateRating() throws Exception {
+        Rating rating = new Rating(
+                1,
+                "test",
+                "test",
+                "test",
+                12
+        );
+        mockMvc.perform(post("/rating/update/1")
+                        .with(csrf())
+                        .flashAttr("ratings", rating))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    void updateRatingShouldNotWorkIfOrderNumberIsNull() throws Exception {
+        Rating rating = new Rating(
+                1,
+                "test",
+                "test",
+                "test",
+                null
+        );
+        mockMvc.perform(post("/rating/update/1")
+                        .with(csrf())
+                        .flashAttr("ratings", rating))
+                .andExpect(status().isOk());
     }
 
     @Test
