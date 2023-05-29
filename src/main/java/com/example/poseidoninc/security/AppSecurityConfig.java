@@ -13,6 +13,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 
+/**
+ * THIS CLASS IMPLEMENTS SECURITY CONFIGURATION
+ * IT CONFIGURES AUTHORIZATION ON URL ACCORDING TO ROLES
+ */
+
 @EnableWebSecurity
 @Configuration
 public class AppSecurityConfig {
@@ -28,6 +33,11 @@ public class AppSecurityConfig {
         this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
     }
 
+
+    /**
+     * THIS BEAN CONFIGURES A PROVIDER TO ACCESS SESSION STORED IN DB
+     * @return DaoAuthenticationProvider
+     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -36,11 +46,25 @@ public class AppSecurityConfig {
         return authenticationProvider;
     }
 
+    /**
+     * THIS BEAN CONFIGURES THE AUTHENTICATION MANAGER
+     * @param configuration
+     * @return
+     * @throws Exception
+     */
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+    /**
+     * THIS METHOD CONFIGURES THE SECURITY OF THE APPLICATION.
+     * IT ALLOWS PUBLIC ACCESS TO SPECIFIC URLS AND RESTRICTS ACCESS TO LOGGED USER WITH SPECIFIC AUTHORITY
+     * @param http
+     * @return
+     * @throws Exception
+     */
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

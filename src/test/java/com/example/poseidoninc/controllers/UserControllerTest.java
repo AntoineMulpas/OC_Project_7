@@ -1,6 +1,7 @@
 package com.example.poseidoninc.controllers;
 
 import com.example.poseidoninc.domain.User;
+import com.example.poseidoninc.domain.UserDTO;
 import com.example.poseidoninc.services.BidListService;
 import com.example.poseidoninc.services.UserAuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -60,7 +61,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void validateAddNewUser() throws Exception {
-        User user = new User("antoine", "Password123@", "antoine", "ADMIN");
+        UserDTO user = new UserDTO("antoine", "Password123@", "antoine", "ADMIN");
         mockMvc.perform(MockMvcRequestBuilders.post("/user/validate")
                         .with(csrf())
                         .flashAttr("user", user))
@@ -70,7 +71,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void validateAddNewUserShouldNotWorkWhenUsernameIsNull() throws Exception {
-        User user = new User(null, "Password12@", "antoine", "ADMIN");
+        UserDTO user = new UserDTO(null, "Password12@", "antoine", "ADMIN");
         mockMvc.perform(MockMvcRequestBuilders.post("/user/validate")
                         .with(csrf())
                         .flashAttr("user", user))
@@ -80,7 +81,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void validateAddNewUserShouldNotWorkWhenPasswordDoesNotContainSpecialCharacter() throws Exception {
-        User user = new User(null, "Password12", "antoine", "ADMIN");
+        UserDTO user = new UserDTO(null, "Password12", "antoine", "ADMIN");
         mockMvc.perform(MockMvcRequestBuilders.post("/user/validate")
                         .with(csrf())
                         .flashAttr("user", user))
@@ -98,7 +99,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void updateUser() throws Exception {
-        User user = new User(1,"antoine", "Password123@", "antoine", "ADMIN");
+        UserDTO user = new UserDTO(1,"antoine", "Password123@", "antoine", "ADMIN");
         mockMvc.perform(MockMvcRequestBuilders.post("/user/update/1")
                         .with(csrf())
                         .flashAttr("user", user))
@@ -108,7 +109,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void updateUserShouldNotWorkIfUsernameIsNull() throws Exception {
-        User user = new User(1,null, "Password123@", "antoine", "ADMIN");
+        UserDTO user = new UserDTO(1,null, "Password123@", "antoine", "ADMIN");
         mockMvc.perform(MockMvcRequestBuilders.post("/user/update/1")
                         .with(csrf())
                         .flashAttr("user", user))

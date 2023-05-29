@@ -2,7 +2,9 @@ package com.example.poseidoninc.integration;
 
 import com.example.poseidoninc.controllers.UserController;
 import com.example.poseidoninc.domain.User;
+import com.example.poseidoninc.domain.UserDTO;
 import com.example.poseidoninc.repositories.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -47,13 +50,13 @@ public class UserIT {
     }
 
     @Test
+    @WithMockUser(authorities = {"ADMIN"})
     void addNewUser() throws Exception {
-        String text = "{\"username\":\"antoine\",\"password\":\"Password12@\",\"fullname\":\"antoine\",\"role\":\"ADMIN\"}";
-        User user = new User("antoine", "Password12@", "antoine", "ADMIN");
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/add")
-                        .content(text)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        UserDTO user = new UserDTO("antoine", "Password12@", "antoine", "ADMIN");
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/validate")
+                        .with(csrf())
+                        .flashAttr("user", user))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test

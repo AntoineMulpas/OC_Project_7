@@ -1,6 +1,7 @@
 package com.example.poseidoninc.services;
 
 import com.example.poseidoninc.domain.User;
+import com.example.poseidoninc.domain.UserDTO;
 import com.example.poseidoninc.repositories.UserRepository;
 import com.example.poseidoninc.security.CustomPasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,36 +52,37 @@ class UserAuthenticationServiceTest {
 
     @Test
     void saveAUser() {
+        UserDTO userDTO = new UserDTO("antoine", "password", "antoine", "ADMIN");
         when(customPasswordEncoder.encodePassword((anyString()))).thenReturn("password");
         when(userRepository.findByUsernameEquals(anyString())).thenReturn(Optional.empty());
         when(userRepository.save(any())).thenReturn(user);
-        assertNotNull(underTest.saveAUser(user).getUsername());
+        assertNotNull(underTest.saveAUser(userDTO).getUsername());
     }
 
     @Test
     void saveAUserShouldThrowIfUsernameIsNull() {
-     assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new User(null, "password", "antoine", "ADMIN")));
+     assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new UserDTO(null, "password", "antoine", "ADMIN")));
     }
 
     @Test
     void saveAUserShouldThrowIfUsernameIsEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new User("", "password", "antoine", "ADMIN")));
+        assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new UserDTO("", "password", "antoine", "ADMIN")));
     }
 
     @Test
     void saveAUserShouldThrowIfPasswordIsEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new User("antoine", "", "antoine", "ADMIN")));
+        assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new UserDTO("antoine", "", "antoine", "ADMIN")));
     }
 
     @Test
     void saveAUserShouldThrowIfPasswordIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new User("antoine", null, "antoine", "ADMIN")));
+        assertThrows(IllegalArgumentException.class, () -> underTest.saveAUser(new UserDTO("antoine", null, "antoine", "ADMIN")));
     }
 
     @Test
     void saveAUserShouldThrowIfUserAlreadyExists() {
        when(userRepository.findByUsernameEquals(anyString())).thenReturn(Optional.of(new User()));
-       assertThrows(RuntimeException.class, () -> underTest.saveAUser(new User("antoine", "password", "antoine", "ADMIN")));
+       assertThrows(RuntimeException.class, () -> underTest.saveAUser(new UserDTO("antoine", "password", "antoine", "ADMIN")));
     }
 
     @Test
@@ -117,14 +119,16 @@ class UserAuthenticationServiceTest {
 
     @Test
     void updateUser() {
+        UserDTO userDTO = new UserDTO("antoine", "password", "antoine", "ADMIN");
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(userRepository.save(any())).thenReturn(user);
-        assertEquals(user.getFullname(), underTest.updateUser(1, user).getFullname());
+        assertEquals(user.getFullname(), underTest.updateUser(1, userDTO).getFullname());
     }
 
     @Test
     void updateUserShouldReturnNull() {
+        UserDTO userDTO = new UserDTO("antoine", "password", "antoine", "ADMIN");
         when(userRepository.findById(1)).thenReturn(Optional.empty());
-        assertNull(underTest.updateUser(1, user));
+        assertNull(underTest.updateUser(1, userDTO));
     }
 }

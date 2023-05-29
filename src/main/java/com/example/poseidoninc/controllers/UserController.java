@@ -1,6 +1,7 @@
 package com.example.poseidoninc.controllers;
 
 import com.example.poseidoninc.domain.User;
+import com.example.poseidoninc.domain.UserDTO;
 import com.example.poseidoninc.services.UserAuthenticationService;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -51,13 +51,13 @@ public class UserController {
 
     /**
      * This method is used to get the HTML page to add a new user.
-     * @param bid
+     * @param user
      * @param authentication
      * @return an HTML page containing the form to add a new user.
      */
 
     @GetMapping("/user/add")
-    public String addUser(User bid, Authentication authentication) {
+    public String addUser(@ModelAttribute("user") UserDTO user, Authentication authentication) {
         logger.info(authentication.getName() + " has requested page to add new user.");
         return "user/add";
     }
@@ -73,7 +73,7 @@ public class UserController {
      */
 
     @PostMapping("/user/validate")
-    public String validate(@Valid  User user, BindingResult result, Model model, Authentication authentication) {
+    public String validate(@Valid @ModelAttribute("user") UserDTO user, BindingResult result, Model model, Authentication authentication) {
         if (!result.hasErrors()) {
             userAuthenticationService.saveAUser(user);
             logger.info(authentication.getName() + " has added a new user.");
@@ -96,13 +96,14 @@ public class UserController {
     public String showUpdateForm(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         User user = userAuthenticationService.findUserById(id);
         user.setPassword("");
-        model.addAttribute("user", user);
+        UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), "", user.getFullname(), user.getRole());
+        model.addAttribute("user", userDTO);
         logger.info(authentication.getName() + " has requested page to update User");
         return "user/update";
     }
 
     /**
-     * This method is used to valdate the content of the form to update an user.
+     * This method is used to validate the content of the form to update an user.
      * @param id
      * @param user
      * @param result
@@ -113,8 +114,8 @@ public class UserController {
      */
 
     @PostMapping("/user/update/{id}")
-    public String updateUser(@PathVariable("id") Integer id, @Valid User user,
-                             BindingResult result, Model model, Authentication authentication) {
+    public String updateUser(@Valid @ModelAttribute("user") UserDTO user,
+                             BindingResult result, @PathVariable("id") Integer id,  Model model, Authentication authentication) {
         if (result.hasErrors()) {
             logger.error(authentication.getName() + ": User is not valid for updating id " + id);
             return "user/update";

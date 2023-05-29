@@ -90,6 +90,10 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0-M7</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -143,9 +147,6 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <excludes>
-                        <exclude>**/*IT.java</exclude>
-                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
